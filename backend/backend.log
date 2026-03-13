@@ -1,0 +1,19 @@
+INFO:     Started server process [9581]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:50693 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50737 - "OPTIONS /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50737 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50737 - "OPTIONS /cases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50738 - "GET /cases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50759 - "OPTIONS /cases/demo/announcements HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50759 - "GET /cases/demo/announcements HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "OPTIONS /cases/all/referrals HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "GET /cases/all/referrals HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50769 - "GET /cases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /cases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /cases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /cases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /cases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /cases HTTP/1.1" 200 OK
