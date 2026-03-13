@@ -9,6 +9,13 @@ from app.core.security import User, Permission
 
 router = APIRouter(prefix="/cases", tags=["cases"])
 
+@router.get("", response_model=List[Case])
+async def list_cases(
+    current_user: Annotated[User, Depends(get_current_user)]
+):
+    from app.repositories.json_repo import repo
+    return repo.get_all("cases")
+
 @router.post("", response_model=Case)
 async def create_case(
     case_in: CaseCreate, 
