@@ -2,7 +2,8 @@
 from fastapi import APIRouter, Depends
 from typing import List, Annotated
 from app.schemas.announcement import Announcement, AnnouncementCreate
-from app.services.announcement_service import service as announcement_service
+from app.services.announcement_service import AnnouncementService
+announcement_service = AnnouncementService()
 from app.core.deps import get_current_user
 from app.core.security import User
 

@@ -2,10 +2,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List, Annotated
 from app.schemas.document import Document, DocumentCreate, DocumentReview
-from app.repositories.json_repo import repo
+from app.repositories.document_repo import DocumentRepo
 from app.core.deps import get_current_user, require_permission
 from app.core.security import User, Permission
 from datetime import datetime, timezone
+
+repo = DocumentRepo()
 
 router = APIRouter(tags=["documents"])
 

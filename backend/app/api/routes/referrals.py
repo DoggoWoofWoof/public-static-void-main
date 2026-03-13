@@ -2,7 +2,8 @@
 from fastapi import APIRouter, Depends
 from typing import List, Annotated
 from app.schemas.referral import Referral, ReferralCreate, ReferralUpdate
-from app.services.referral_service import service as referral_service
+from app.services.referral_service import ReferralService
+referral_service = ReferralService()
 from app.core.deps import get_current_user
 from app.core.security import User
 

@@ -2,7 +2,8 @@
 from fastapi import APIRouter, Depends
 from typing import Annotated
 from app.schemas.scoring import ScoreSnapshot
-from app.services.scoring_service import service as scoring_service
+from app.services.scoring_service import ScoringService
+scoring_service = ScoringService()
 from app.core.deps import get_current_user, require_permission
 from app.core.security import User, Permission
 

@@ -2,7 +2,8 @@
 from fastapi import APIRouter, Depends
 from typing import List, Annotated
 from app.schemas.case import Case, CaseCreate
-from app.services.case_service import service as case_service
+from app.services.case_service import CaseService
+case_service = CaseService()
 from app.core.deps import get_current_user, require_permission
 from app.core.security import User, Permission
 

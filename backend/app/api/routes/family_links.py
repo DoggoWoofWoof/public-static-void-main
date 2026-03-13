@@ -2,10 +2,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List, Annotated
 from app.schemas.family_link import FamilyLink, FamilyLinkCreate, FamilyLinkReview
-from app.repositories.json_repo import repo
+from app.repositories.family_link_repo import FamilyLinkRepo
 from app.core.deps import get_current_user, require_permission
 from app.core.security import User, Permission
 from datetime import datetime, timezone
+
+repo = FamilyLinkRepo()
 
 router = APIRouter(tags=["family_links"])
 

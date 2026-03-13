@@ -1,9 +1,9 @@
 # backend/app/services/referral_service.py
 from datetime import datetime, timezone
 from fastapi import HTTPException
-from app.repositories.json_repo import repo
+from app.repositories.referral_repo import ReferralRepo
 from app.schemas.referral import ReferralCreate, ReferralUpdate, ReferralStatus
-from app.services.case_service import service as case_service
+from app.services.case_service import CaseService
 from app.schemas.case import CaseStatus
 from app.core.security import Permission
 

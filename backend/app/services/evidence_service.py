@@ -1,9 +1,9 @@
 # backend/app/services/evidence_service.py
 from datetime import datetime, timezone
 from fastapi import HTTPException
-from app.repositories.json_repo import repo
+from app.repositories.evidence_repo import EvidenceRepo
 from app.schemas.evidence import EvidenceCreate, EvidenceReview, EvidenceClass, EvidenceState
-from app.services.case_service import service as case_service
+from app.services.case_service import CaseService
 from app.schemas.case import CaseStatus
 
 class EvidenceService:

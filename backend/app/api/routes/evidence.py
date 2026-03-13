@@ -2,7 +2,8 @@
 from fastapi import APIRouter, Depends
 from typing import List, Annotated
 from app.schemas.evidence import Evidence, EvidenceCreate, EvidenceReview
-from app.services.evidence_service import service as evidence_service
+from app.services.evidence_service import EvidenceService
+evidence_service = EvidenceService()
 from app.core.deps import get_current_user, require_permission
 from app.core.security import User, Permission
 
