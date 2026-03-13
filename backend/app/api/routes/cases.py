@@ -6,6 +6,7 @@ from app.services.case_service import CaseService
 case_service = CaseService()
 from app.core.deps import get_current_user, require_permission
 from app.core.security import User, Permission
+from app.repositories.audit_repo import AuditRepo
 
 router = APIRouter(prefix="/cases", tags=["cases"])
 
@@ -30,3 +31,12 @@ async def get_case(
     current_user: Annotated[User, Depends(get_current_user)] = None
 ):
     return await case_service.get_case(case_id)
+
+@router.get("/{case_id}/timeline", response_model=List[dict])
+async def get_case_timeline(
+    case_id: str,
+    current_user: Annotated[User, Depends(get_current_user)] = None
+):
+    """Return the audit log timeline for a case."""
+    repo = AuditRepo()
+    return await repo.get_log(case_id)

@@ -19,18 +19,12 @@ class ScoringService:
         self.family_link_repo = FamilyLinkRepo()
         self.score_repo = ScoreRepo()
 
-    async def get_latest_score(self, case_id: str) -> dict:
+    async def get_latest_score(self, case_id: str) -> dict | None:
         case = await self.case_repo.find_by_id(case_id)
         if not case:
-            if case_id == "test-id":
-                return self._placeholder_score(case_id)
             raise HTTPException(status_code=404, detail="Case not found")
 
-        latest = await self.score_repo.find_latest(case_id)
-        if latest:
-            return latest
-
-        return await self.recompute_score(case_id)
+        return await self.score_repo.find_latest(case_id)  # None if no snapshot yet
 
     async def recompute_score(self, case_id: str) -> dict:
         case = await self.case_repo.find_by_id(case_id)

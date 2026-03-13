@@ -66,7 +66,7 @@ class EvidenceService:
              raise HTTPException(status_code=403, detail="Refugees cannot review evidence.")
              
         updates = {
-            "state": review_in.state.value,
+            "review_status": review_in.state.value,
             "reviewed_at": datetime.now(timezone.utc).isoformat(),
             "reviewed_by": current_user.id
         }
