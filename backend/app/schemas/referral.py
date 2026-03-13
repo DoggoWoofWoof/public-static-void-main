@@ -1,19 +1,37 @@
-"""Referral schemas."""
-from pydantic import BaseModel
+# backend/app/schemas/referral.py
+from pydantic import BaseModel, ConfigDict
+from enum import Enum
 from typing import Optional
 
+class ReferralType(str, Enum):
+    REFERRAL = "referral"
+    CONSULTATION = "consultation"
+    TRANSFER = "transfer"
+    NOTIFICATION = "notification"
 
-class ReferralCreate(BaseModel):
-    referral_type: str  # employment | housing | medical | legal | education
-    description: Optional[str] = None
-    partner_id: Optional[str] = None
+class ReferralStatus(str, Enum):
+    OPEN = "open"
+    ACCEPTED = "accepted"
+    DECLINED = "declined"
+    COMPLETED = "completed"
 
-
-class ReferralOut(BaseModel):
-    id: str
+class ReferralBase(BaseModel):
     case_id: str
-    case_code: Optional[str] = None
-    referral_type: str
-    description: Optional[str] = None
-    status: str = "pending"  # pending | active | completed | cancelled
-    created_at: Optional[str] = None
+    referral_type: ReferralType
+    from_agency: str
+    to_agency: str
+    reason: Optional[str] = None
+
+class ReferralCreate(ReferralBase):
+    pass
+
+class ReferralUpdate(BaseModel):
+    status: ReferralStatus
+
+class Referral(ReferralBase):
+    id: str
+    status: ReferralStatus = ReferralStatus.OPEN
+    created_by: Optional[str] = None
+    created_at: str
+
+    model_config = ConfigDict(from_attributes=True)

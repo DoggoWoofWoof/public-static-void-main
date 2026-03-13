@@ -1,24 +1,30 @@
-"""Cases routes — CRUD for refugee cases."""
-
+# backend/app/api/routes/cases.py
 from fastapi import APIRouter, Depends
-from app.schemas.case import CaseOut, CaseCreate
-from app.core.deps import get_current_user
-from app.services.case_service import CaseService
+from typing import List, Annotated
+from app.schemas.case import Case, CaseCreate
+from app.services.case_service import service as case_service
+from app.core.deps import get_current_user, require_permission
+from app.core.security import User, Permission
 
-router = APIRouter()
-service = CaseService()
+router = APIRouter(prefix="/cases", tags=["cases"])
 
+@router.post("", response_model=Case)
+async def create_case(
+    case_in: CaseCreate, 
+    current_user: Annotated[User, Depends(require_permission(Permission.INTAKE_OFFICER))]
+):
+    return case_service.create_case(case_in, current_user.id, current_user.role)
 
-@router.get("", response_model=list[CaseOut])
-async def list_cases(status: str | None = None, search: str | None = None):
-    return await service.list_cases(status=status, search=search)
+@router.get("/{case_id}", response_model=Case)
+async def get_case(
+    case_id: str,
+    current_user: Annotated[User, Depends(get_current_user)]
+):
+    return case_service.get_case(case_id)
 
-
-@router.get("/{case_id}", response_model=CaseOut)
-async def get_case(case_id: str):
-    return await service.get_case(case_id)
-
-
-@router.post("", response_model=CaseOut)
-async def create_case(body: CaseCreate, user: dict = Depends(get_current_user)):
-    return await service.create_case(body, created_by=user.get("sub"))
+@router.get("/{case_id}/timeline", response_model=List[dict])
+async def get_case_timeline(
+    case_id: str,
+    current_user: Annotated[User, Depends(get_current_user)]
+):
+    return case_service.get_timeline(case_id)

@@ -1,92 +1,73 @@
-"""Feature builder — constructs feature vectors from case evidence for ML scoring.
+# backend/app/ml/feature_builder.py
+from app.schemas.scoring import FeatureSnapshot
+from app.schemas.evidence import EvidenceClass, EvidenceState
+from app.schemas.family_link import LinkStatus
+from app.schemas.document import DocumentState
 
-For the hackathon, the model is trained on synthetic structured case data
-generated from policy-consistent evidence combinations.
-
-Evidence trust classes and their default weights:
-  Official:      biometric_match (0.95), government_record (0.90), verified_ngo_record (0.85)
-  Corroborated:  family_confirmation (0.70), employer_confirmation (0.65), school_confirmation (0.60)
-  Self-declared:  profile_details (0.30), reported_family (0.25), education_claims (0.20), skill_declarations (0.15)
-"""
-
-import pandas as pd
-
-
-EVIDENCE_WEIGHTS = {
-    # Official
-    "biometric_match": 0.95,
-    "government_record": 0.90,
-    "verified_ngo_record": 0.85,
-    # Corroborated
-    "family_confirmation": 0.70,
-    "employer_confirmation": 0.65,
-    "school_confirmation": 0.60,
-    # Self-declared
-    "profile_details": 0.30,
-    "reported_family_members": 0.25,
-    "education_claims": 0.20,
-    "skill_declarations": 0.15,
-}
-
-FEATURE_COLUMNS = [
-    "has_biometric",
-    "has_government_record",
-    "has_ngo_verification",
-    "family_confirmations_count",
-    "employer_confirmations_count",
-    "school_confirmations_count",
-    "self_declared_count",
-    "total_evidence_count",
-    "official_evidence_count",
-    "corroborated_evidence_count",
-    "weighted_evidence_sum",
-    "has_verified_family_link",
-    "days_in_system",
-]
-
-
-def build_features(evidence_list: list, family_links: list = None, days_in_system: int = 0) -> dict:
-    """Build a feature dict from raw evidence and family link data."""
-    features = {col: 0 for col in FEATURE_COLUMNS}
-
-    for ev in evidence_list:
-        etype = ev.get("evidence_type", "")
-        tclass = ev.get("trust_class", "self_declared")
-
-        features["total_evidence_count"] += 1
-
-        if tclass == "official":
-            features["official_evidence_count"] += 1
-        elif tclass == "corroborated":
-            features["corroborated_evidence_count"] += 1
-        else:
-            features["self_declared_count"] += 1
-
-        if etype == "biometric_match":
-            features["has_biometric"] = 1
-        elif etype == "government_record":
-            features["has_government_record"] = 1
-        elif etype == "verified_ngo_record":
-            features["has_ngo_verification"] = 1
-        elif etype == "family_confirmation":
-            features["family_confirmations_count"] += 1
-        elif etype == "employer_confirmation":
-            features["employer_confirmations_count"] += 1
-        elif etype == "school_confirmation":
-            features["school_confirmations_count"] += 1
-
-        features["weighted_evidence_sum"] += EVIDENCE_WEIGHTS.get(etype, 0.1)
-
-    # Family links
-    if family_links:
-        features["has_verified_family_link"] = int(
-            any(fl.get("trust_state") == "verified" for fl in family_links)
-        )
-
-    features["days_in_system"] = days_in_system
-    return features
-
-
-def features_to_dataframe(features: dict) -> pd.DataFrame:
-    """Convert feature dict to a single-row DataFrame for model input."""
-    return pd.DataFrame([features], columns=FEATURE_COLUMNS)
+def build_features(evidence_items: list[dict], family_links: list[dict], documents: list[dict]) -> FeatureSnapshot:
+    official_count = 0
+    corroborated_count = 0
+    self_declared_count = 0
+    
+    accepted_official = 0
+    accepted_corroborated = 0
+    disputed_count = 0
+    rejected_count = 0
+    
+    bio_match = 0
+    gov_record = 0
+    ngo_record = 0
+    fam_conf = 0
+    
+    for item in evidence_items:
+        cls = item.get("evidence_class")
+        state = item.get("state")
+        typ = item.get("evidence_type", "")
+        
+        if cls == EvidenceClass.OFFICIAL.value:
+            official_count += 1
+            if state == EvidenceState.ACCEPTED.value:
+                accepted_official += 1
+        elif cls == EvidenceClass.CORROBORATED.value:
+            corroborated_count += 1
+            if state == EvidenceState.ACCEPTED.value:
+                accepted_corroborated += 1
+        elif cls == EvidenceClass.SELF_DECLARED.value:
+            self_declared_count += 1
+            
+        if state == EvidenceState.DISPUTED.value:
+            disputed_count += 1
+        elif state == EvidenceState.REJECTED.value:
+            rejected_count += 1
+            
+        if typ == "biometric_match" and state == EvidenceState.ACCEPTED.value:
+            bio_match = 1
+        if typ == "government_record" and state == EvidenceState.ACCEPTED.value:
+            gov_record = 1
+        if typ == "ngo_record" and state == EvidenceState.ACCEPTED.value:
+            ngo_record = 1
+        if typ == "family_confirmation" and state == EvidenceState.ACCEPTED.value:
+            fam_conf = 1
+            
+    verified_links = sum(1 for link in family_links if link.get("link_status") == LinkStatus.VERIFIED.value)
+    
+    docs_verified = sum(1 for doc in documents if doc.get("state") == DocumentState.VERIFIED.value)
+    docs_rejected = sum(1 for doc in documents if doc.get("state") == DocumentState.REJECTED.value)
+            
+    return FeatureSnapshot(
+        official_evidence_count=official_count,
+        corroborated_evidence_count=corroborated_count,
+        self_declared_count=self_declared_count,
+        accepted_official_count=accepted_official,
+        accepted_corroborated_count=accepted_corroborated,
+        disputed_count=disputed_count,
+        rejected_count=rejected_count,
+        biometric_match_present=bio_match,
+        government_record_present=gov_record,
+        verified_ngo_record_present=ngo_record,
+        family_confirmation_present=fam_conf,
+        verified_family_links_count=verified_links,
+        documents_verified_count=docs_verified,
+        documents_rejected_count=docs_rejected,
+        external_confirmed_matches=0
+    )

@@ -1,33 +1,76 @@
-"""
-Security utilities — JWT creation and verification.
-"""
+# backend/app/core/security.py
 
-from datetime import datetime, timedelta, timezone
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+from enum import Enum
+from pydantic import BaseModel
 
-from app.core.config import settings
+class Role(str, Enum):
+    REFUGEE = "refugee"
+    AUTHORITY = "authority"
+    PARTNER = "partner"
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+class Permission(str, Enum):
+    # Authority permissions
+    INTAKE_OFFICER = "intake_officer"
+    REVIEWER = "reviewer"
+    CASE_MANAGER = "case_manager"
+    COMMUNICATIONS_PUBLISHER = "communications_publisher"
+    
+    # Partner permissions
+    PARTNER_SERVICE_OFFICER = "partner_service_officer"
+    
+    # Refugee permissions
+    READ_ONLY_SELF_SERVICE = "read_only_self_service"
 
+class User(BaseModel):
+    id: str
+    username: str
+    role: Role
+    permissions: list[Permission]
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+# Hardcoded demo users
+DEMO_USERS = {
+    # Authorities
+    "auth_intake": User(
+        id="auth_intake_1",
+        username="auth_intake",
+        role=Role.AUTHORITY,
+        permissions=[Permission.INTAKE_OFFICER]
+    ),
+    "auth_reviewer": User(
+        id="auth_reviewer_1",
+        username="auth_reviewer",
+        role=Role.AUTHORITY,
+        permissions=[Permission.REVIEWER]
+    ),
+    "auth_manager": User(
+        id="auth_manager_1",
+        username="auth_manager",
+        role=Role.AUTHORITY,
+        permissions=[Permission.CASE_MANAGER, Permission.REVIEWER, Permission.INTAKE_OFFICER, Permission.COMMUNICATIONS_PUBLISHER]
+    ),
+    "auth_publisher": User(
+         id="auth_publisher_1",
+         username="auth_publisher",
+         role=Role.AUTHORITY,
+         permissions=[Permission.COMMUNICATIONS_PUBLISHER]
+    ),
 
+    # Partners
+    "partner_user": User(
+        id="partner_user_1",
+        username="partner_user",
+        role=Role.PARTNER,
+        permissions=[Permission.PARTNER_SERVICE_OFFICER]
+    ),
 
-def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    # Refugees
+    "refugee_user": User(
+        id="refugee_user_1",
+        username="refugee_user",
+        role=Role.REFUGEE,
+        permissions=[Permission.READ_ONLY_SELF_SERVICE]
+    )
+}
 
-
-def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
-
-
-def decode_access_token(token: str) -> dict | None:
-    try:
-        return jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
-    except JWTError:
-        return None
+def get_demo_user(username: str) -> User | None:
+    return DEMO_USERS.get(username)

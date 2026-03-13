@@ -1,13 +1,29 @@
-"""Announcement schemas."""
-from pydantic import BaseModel
+# backend/app/schemas/announcement.py
+from pydantic import BaseModel, ConfigDict
+from enum import Enum
 from typing import Optional
 
+class TargetType(str, Enum):
+    CASE = "case"
+    FAMILY = "family"
+    LOCATION = "location"
+    STATUS_GROUP = "status_group"
+    SEGMENT = "segment"
 
-class AnnouncementOut(BaseModel):
-    id: str
-    announcement_type: str  # appointment_reminder | food_shelter_medical | document_request | screening_update | employment_pathway | school_enrollment
+class AnnouncementBase(BaseModel):
     title: str
     body: str
-    target_case_id: Optional[str] = None
-    posted_by: Optional[str] = None
-    created_at: Optional[str] = None
+    announcement_type: str
+    target_type: TargetType
+    target_ref: str
+
+class AnnouncementCreate(AnnouncementBase):
+    pass
+
+class Announcement(AnnouncementBase):
+    id: str
+    published_by: Optional[str] = None
+    published_at: str
+    valid_until: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)

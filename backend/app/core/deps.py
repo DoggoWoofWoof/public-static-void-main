@@ -1,33 +1,23 @@
-"""
-Dependency injection — FastAPI Depends() helpers.
-"""
+# backend/app/core/deps.py
+from typing import Annotated
+from fastapi import Header, HTTPException, Depends
+from app.core.security import get_demo_user, User, Permission
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+# A mock dependency to get the current user based on a header token (username in this demo)
+async def get_current_user(x_demo_username: Annotated[str, Header()] = "auth_manager") -> User:
+    user = get_demo_user(x_demo_username)
+    if not user:
+         raise HTTPException(status_code=401, detail="Invalid Demo Username provided in X-Demo-Username header.")
+    return user
 
-from app.core.security import decode_access_token
+# Dependency factory for checking permissions
+def require_permission(required_permission: Permission):
+    def permission_checker(current_user: Annotated[User, Depends(get_current_user)]) -> User:
+        if required_permission not in current_user.permissions:
+            raise HTTPException(status_code=403, detail=f"User does not have required permission: {required_permission.value}")
+        return current_user
+    return permission_checker
 
-bearer_scheme = HTTPBearer(auto_error=False)
-
-
-async def get_current_user(
-    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
-) -> dict:
-    """Extract and validate the current user from the JWT token."""
-    if not credentials:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
-
-    payload = decode_access_token(credentials.credentials)
-    if not payload:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
-
-    return payload
-
-
-async def require_role(required_role: str):
-    """Factory for role-based access control."""
-    async def _check(user: dict = Depends(get_current_user)):
-        if user.get("role") != required_role:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"Role '{required_role}' required")
-        return user
-    return _check
+async def get_scoring_service():
+    from app.services.scoring_service import ScoringService
+    return ScoringService()
