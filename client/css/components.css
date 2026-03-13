@@ -1,0 +1,301 @@
+/* ── Shared component styles ──────────────────────────── */
+
+/* ── Card ──────────────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  transition: box-shadow var(--transition-base);
+}
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Stat card ─────────────────────────────────────────── */
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  text-align: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+.stat-value {
+  display: block;
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  color: var(--accent);
+}
+.stat-label {
+  display: block;
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  margin-top: var(--space-1);
+}
+
+/* ── Feature card ──────────────────────────────────────── */
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  text-align: center;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-3);
+}
+.feature-card h3 {
+  margin-bottom: var(--space-2);
+}
+.feature-card p {
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+}
+
+/* ── Buttons ───────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-glow);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+.btn-outline:hover {
+  background: var(--accent-glow);
+}
+.btn-sm {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-xs);
+}
+.btn-full { width: 100%; }
+
+/* ── Badges ────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-intake        { background: #1e3a5f; color: #60a5fa; }
+.badge-under_review  { background: #3b3000; color: var(--warning); }
+.badge-provisional   { background: #1a3326; color: var(--success); }
+.badge-verified      { background: #064e3b; color: #34d399; }
+.badge-referred      { background: #312e56; color: #a78bfa; }
+.badge-disputed      { background: #3b1219; color: var(--danger); }
+
+/* Score confidence bands */
+.badge-unverified    { background: #3b1219; color: var(--danger); }
+.badge-low           { background: #3b2200; color: var(--warning); }
+.badge-provisional_id{ background: #1a3326; color: var(--success); }
+.badge-verified_id   { background: #064e3b; color: #34d399; }
+
+/* Evidence trust classes */
+.badge-official      { background: #064e3b; color: #34d399; }
+.badge-corroborated  { background: #1e3a5f; color: #60a5fa; }
+.badge-self_declared { background: #3b3000; color: var(--warning); }
+
+/* Family link trust states */
+.badge-declared       { background: #3b3000; color: var(--warning); }
+.badge-candidate_match{ background: #1e3a5f; color: #60a5fa; }
+.badge-verified_link  { background: #064e3b; color: #34d399; }
+
+/* ── Forms ─────────────────────────────────────────────── */
+.form-group {
+  margin-bottom: var(--space-4);
+}
+.form-group label {
+  display: block;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-1);
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  transition: border-color var(--transition-fast);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* ── Tables ────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-table th,
+.data-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.data-table th {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.data-table tr:hover {
+  background: var(--bg-hover);
+}
+.data-table tr { cursor: pointer; }
+
+/* ── Tabs ──────────────────────────────────────────────── */
+.submit-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-2);
+}
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+.tab-btn.active,
+.tab-btn:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── Navbar ────────────────────────────────────────────── */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-6);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.navbar-brand {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--accent);
+}
+.navbar-links {
+  display: flex;
+  gap: var(--space-4);
+  list-style: none;
+}
+.navbar-links a {
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.navbar-links a:hover,
+.navbar-links a.active {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+/* ── Graph canvas ──────────────────────────────────────── */
+.graph-canvas {
+  min-height: 300px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Back link ─────────────────────────────────────────── */
+.back-link {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+  display: inline-block;
+}
+
+/* ── Case header ───────────────────────────────────────── */
+.case-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-8);
+}
+.case-header h1 { margin-top: var(--space-2); }
+
+/* ── Case actions ──────────────────────────────────────── */
+.case-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+/* ── Login card ────────────────────────────────────────── */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+}
+.login-hint {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--font-sm);
+  margin-top: var(--space-4);
+}

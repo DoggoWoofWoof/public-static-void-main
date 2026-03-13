@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
+venv/
+
+# Models
+*.joblib
+*.pkl
+*.json.bkp
+
+# Env
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Node if ever used
+node_modules/
+
+# Jupyter
+.ipynb_checkpoints/

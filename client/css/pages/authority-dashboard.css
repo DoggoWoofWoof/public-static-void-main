@@ -1,0 +1,46 @@
+/* ── Authority Dashboard page styles ──────────────────── */
+
+.case-list-section {
+  margin-top: var(--space-4);
+}
+
+/* Search/filter bar */
+#search-input {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  width: 220px;
+  transition: border-color var(--transition-fast);
+}
+#search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+#status-filter {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+}
+
+/* Case row styling */
+.case-row {
+  display: grid;
+  grid-template-columns: 100px 2fr 1fr 1fr 100px;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition-fast);
+  cursor: pointer;
+}
+.case-row:hover {
+  background: var(--bg-hover);
+}

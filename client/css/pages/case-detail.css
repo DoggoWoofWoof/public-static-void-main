@@ -1,0 +1,55 @@
+/* ── Case Detail page styles ─────────────────────────── */
+
+/* Score breakdown */
+#score-detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.score-factor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+.score-factor:last-child { border-bottom: none; }
+
+.factor-label {
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+}
+.factor-value {
+  font-weight: 600;
+}
+.factor-positive { color: var(--success); }
+.factor-negative { color: var(--danger); }
+.factor-neutral  { color: var(--text-muted); }
+
+/* Blocking constraints */
+.blocking-constraint {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid var(--danger);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-top: var(--space-3);
+  font-size: var(--font-sm);
+  color: var(--danger);
+}
+
+/* Person detail grid item */
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.detail-label {
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+.detail-value {
+  font-weight: 500;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partner Dashboard — BorderBridge</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages/partner-dashboard.css" />
+</head>
+<body>
+  <div id="navbar-root"></div>
+
+  <main class="dashboard-layout">
+    <header class="dashboard-header">
+      <h1>Partner Dashboard</h1>
+      <p class="subtitle">Manage referrals, post announcements, and coordinate services</p>
+    </header>
+
+    <!-- Referrals -->
+    <section class="card">
+      <div class="section-header">
+        <h2>Active Referrals</h2>
+        <button class="btn btn-sm btn-primary" id="new-referral-btn">+ New Referral</button>
+      </div>
+      <div id="referrals-container">
+        <p class="loading">Loading referrals…</p>
+      </div>
+    </section>
+
+    <!-- Announcements management -->
+    <section class="card">
+      <div class="section-header">
+        <h2>Announcements</h2>
+        <button class="btn btn-sm btn-primary" id="new-announcement-btn">+ Post Announcement</button>
+      </div>
+      <p class="help-text">Announcements are one-way, targeted by case/location/status. Only verified authorities and partners can post.</p>
+      <div id="partner-announcements-container">
+        <p class="loading">Loading…</p>
+      </div>
+    </section>
+
+    <!-- Service stats -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <span class="stat-value" id="active-referrals">—</span>
+        <span class="stat-label">Active Referrals</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="completed-referrals">—</span>
+        <span class="stat-label">Completed</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="pending-announcements">—</span>
+        <span class="stat-label">Announcements Posted</span>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="../js/pages/partner-dashboard.js"></script>
+  <script type="module">
+    import { renderNavbar } from "../js/components/navbar.js";
+    renderNavbar(document.getElementById("navbar-root"), "partner");
+  </script>
+</body>
+</html>

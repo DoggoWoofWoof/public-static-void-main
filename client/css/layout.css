@@ -1,0 +1,113 @@
+/* ── Layout utilities ─────────────────────────────────── */
+
+.page-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  padding: var(--space-8);
+}
+
+.dashboard-layout,
+.portal-layout,
+.case-detail-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+}
+
+.dashboard-header,
+.portal-header {
+  margin-bottom: var(--space-8);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+/* ── Grid helpers ─────────────────────────────────────── */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-6);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.filters {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+/* ── Hero ──────────────────────────────────────────────── */
+
+.hero {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+}
+
+.hero h1 {
+  font-size: var(--font-4xl);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-4);
+}
+
+.hero-subtitle {
+  font-size: var(--font-xl);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+}
+
+/* ── Landing ───────────────────────────────────────────── */
+
+.landing {
+  min-height: 100vh;
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .dashboard-layout,
+  .portal-layout,
+  .case-detail-layout {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .hero h1 { font-size: var(--font-3xl); }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .filters { flex-direction: column; width: 100%; }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}

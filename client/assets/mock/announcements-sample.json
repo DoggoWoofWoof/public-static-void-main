@@ -1,0 +1,30 @@
+[
+  {
+    "id": "ann-001",
+    "announcement_type": "appointment_reminder",
+    "title": "Interview Scheduled",
+    "body": "Your identity review interview is scheduled for 15 March 2026 at 10:00 AM, Room 204.",
+    "created_at": "2026-03-10T09:00:00Z"
+  },
+  {
+    "id": "ann-002",
+    "announcement_type": "food_shelter_medical",
+    "title": "Food Distribution — Zone B",
+    "body": "Food packages available at Distribution Point B, Tuesday and Thursday 08:00–12:00.",
+    "created_at": "2026-03-09T14:30:00Z"
+  },
+  {
+    "id": "ann-003",
+    "announcement_type": "document_request",
+    "title": "Additional Documents Needed",
+    "body": "Please submit any available education records or employment references to your case officer.",
+    "created_at": "2026-03-08T11:00:00Z"
+  },
+  {
+    "id": "ann-004",
+    "announcement_type": "employment_pathway",
+    "title": "Employment Opportunity",
+    "body": "Translation services position available through partner agency RefuWork. Contact your case manager.",
+    "created_at": "2026-03-07T16:00:00Z"
+  }
+]

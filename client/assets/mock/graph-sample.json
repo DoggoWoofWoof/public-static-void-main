@@ -1,0 +1,19 @@
+{
+  "nodes": [
+    { "id": "ahmad", "label": "Ahmad Karimi", "type": "person" },
+    { "id": "fatima", "label": "Fatima Karimi", "type": "person" },
+    { "id": "ev-bio", "label": "Biometric Match", "type": "evidence" },
+    { "id": "ev-ngo", "label": "NGO Verification", "type": "evidence" },
+    { "id": "ev-family", "label": "Family Confirmation", "type": "evidence" },
+    { "id": "doc-id", "label": "ID Fragment", "type": "document" },
+    { "id": "ev-employer", "label": "Employer Confirmation", "type": "evidence" }
+  ],
+  "edges": [
+    { "source": "ahmad", "target": "ev-bio" },
+    { "source": "ahmad", "target": "ev-ngo" },
+    { "source": "ahmad", "target": "doc-id" },
+    { "source": "ahmad", "target": "fatima" },
+    { "source": "fatima", "target": "ev-family" },
+    { "source": "ahmad", "target": "ev-employer" }
+  ]
+}
