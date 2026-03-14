@@ -7,6 +7,8 @@ from pathlib import Path
 from jose import JWTError, jwt
 from pydantic import BaseModel
 
+from app.core.config import settings
+
 
 class Role(str, Enum):
     REFUGEE = "refugee"
@@ -32,7 +34,7 @@ class User(BaseModel):
     case_id: str | None = None
 
 
-SECRET_KEY = "borderbridge-demo-secret"
+SECRET_KEY = settings.JWT_SECRET
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 12
 DEFAULT_BORDER_OFFICE_CODE = "117"

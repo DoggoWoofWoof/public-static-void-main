@@ -1,27 +1,21 @@
-import { getSession, type UserRole } from "./auth";
+import { getSession, type AuthSession, type UserRole } from "./auth";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, "") || "http://127.0.0.1:8000";
 const DEFAULT_USER = "auth_manager";
+const DEMO_USER_BY_ROLE: Record<UserRole, string> = {
+  authority: "auth_manager",
+  partner: "partner_user",
+  refugee: "refugee_user",
+};
 
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const session = getSession();
-  const headers = new Headers(options.headers ?? {});
-
-  if (!headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
+function getDemoUsername(session: AuthSession | null) {
+  if (!session) {
+    return DEFAULT_USER;
   }
+  return DEMO_USER_BY_ROLE[session.role] ?? DEFAULT_USER;
+}
 
-  if (session?.accessToken) {
-    headers.set("Authorization", `Bearer ${session.accessToken}`);
-  } else {
-    headers.set("X-Demo-Username", DEFAULT_USER);
-  }
-
-  const res = await fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers,
-  });
-
+async function parseResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
     const text = await res.text().catch(() => res.statusText);
     throw new Error(`${res.status} ${res.statusText}: ${text}`);
@@ -32,6 +26,41 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   }
 
   return res.json() as Promise<T>;
+}
+
+async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const session = getSession();
+  const headers = new Headers(options.headers ?? {});
+  const demoUsername = getDemoUsername(session);
+
+  if (!headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  headers.set("X-Demo-Username", demoUsername);
+
+  if (session?.accessToken) {
+    headers.set("Authorization", `Bearer ${session.accessToken}`);
+  }
+
+  const requestUrl = `${BASE_URL}${path}`;
+  let res = await fetch(requestUrl, {
+    ...options,
+    headers,
+  });
+
+  // Local demo flow: if a stored bearer token is stale, retry once with the
+  // role-based demo header so the workspace does not get stuck on 401.
+  if (res.status === 401 && session?.accessToken) {
+    const retryHeaders = new Headers(headers);
+    retryHeaders.delete("Authorization");
+    res = await fetch(requestUrl, {
+      ...options,
+      headers: retryHeaders,
+    });
+  }
+
+  return parseResponse<T>(res);
 }
 
 export function login(body: { role: UserRole; username: string; password: string }) {

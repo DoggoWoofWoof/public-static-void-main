@@ -37,9 +37,12 @@ const REFERRAL_TYPES = [
 ];
 
 function statusColor(status: string) {
+  if (status === "open") return "bg-yellow-50 text-yellow-700 border-yellow-200";
+  if (status === "accepted") return "bg-green-50 text-green-700 border-green-200";
+  if (status === "declined") return "bg-red-50 text-red-700 border-red-200";
+  if (status === "completed") return "bg-blue-50 text-blue-700 border-blue-200";
   if (status === "approved") return "bg-green-50 text-green-700 border-green-200";
   if (status === "pending" || status === "processing") return "bg-yellow-50 text-yellow-700 border-yellow-200";
-  if (status === "completed") return "bg-blue-50 text-blue-700 border-blue-200";
   if (status === "rejected") return "bg-red-50 text-red-700 border-red-200";
   return "bg-gray-100 text-gray-700 border-gray-200";
 }
@@ -92,8 +95,8 @@ function ReferralManager({ partnerMode, isDark = false }: { partnerMode: boolean
       const created = await createReferral(selectedCaseId, {
         case_id: selectedCaseId,
         referral_type: referralType,
-        from_agency: fromAgency || undefined,
-        to_agency: toAgency || undefined,
+        from_agency: fromAgency || (partnerMode ? "Border authority desk" : "Authority desk"),
+        to_agency: toAgency || (partnerMode ? String(session?.displayName ?? "Partner services team") : "Partner services queue"),
         reason: reason || undefined,
       });
       setReferrals((prev) => [created, ...prev]);
@@ -231,11 +234,10 @@ function ReferralManager({ partnerMode, isDark = false }: { partnerMode: boolean
                             onChange={(e) => handleUpdateStatus(rId, e.target.value)}
                             className="rounded-md border border-slate-300 bg-white px-2 py-1 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                           >
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="processing">Processing</option>
+                            <option value="open">Open</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="declined">Declined</option>
                             <option value="completed">Completed</option>
-                            <option value="rejected">Rejected</option>
                           </select>
                         </td>
                       </tr>

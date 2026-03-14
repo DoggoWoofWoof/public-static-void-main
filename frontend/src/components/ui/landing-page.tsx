@@ -200,7 +200,7 @@ function Hero() {
               <div className="text-[clamp(56px,9vw,132px)] font-black leading-none tracking-[-4px] text-white">
                 BEYOND
               </div>
-              <div className="text-[clamp(56px,9vw,132px)] font-black leading-none tracking-[-4px] text-transparent [WebkitTextStroke:2px_white]">
+              <div className="text-[clamp(56px,9vw,132px)] font-black leading-none tracking-[-4px] text-white/12 [WebkitTextStroke:2px_rgba(255,255,255,0.96)] drop-shadow-[0_0_18px_rgba(255,255,255,0.22)]">
                 BORDERS
               </div>
             </div>

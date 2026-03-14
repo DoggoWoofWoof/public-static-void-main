@@ -1,5 +1,5 @@
 export function BrandLogo({
-  variant: _variant = "dark",
+  variant = "dark",
   compact = false,
   size = "md",
 }: {
@@ -9,88 +9,75 @@ export function BrandLogo({
 }) {
   const sizing = {
     xs: {
-      wrap: "rounded-[14px]",
-      art: "w-[124px]",
+      wrap: "rounded-[12px] px-2.5 py-1.5",
+      art: "w-[132px]",
     },
     sm: {
-      wrap: "rounded-[16px]",
-      art: "w-[148px]",
+      wrap: "rounded-[14px] px-3 py-2",
+      art: "w-[162px]",
     },
     md: {
-      wrap: "rounded-[18px]",
-      art: "w-[174px]",
+      wrap: "rounded-[16px] px-3.5 py-2.5",
+      art: "w-[194px]",
     },
     lg: {
-      wrap: "rounded-[22px]",
-      art: "w-[226px]",
+      wrap: "rounded-[18px] px-4 py-3",
+      art: "w-[236px]",
     },
   }[size];
 
+  const darkSurface = "bg-[#1f2d3d] border border-white/10 shadow-sm";
+  const lightSurface = "bg-white border border-slate-200 shadow-sm";
+  const surfaceClass = variant === "light" ? "bg-white/8 backdrop-blur-sm" : lightSurface;
+  const bgClass = compact ? surfaceClass : variant === "light" ? darkSurface : lightSurface;
+
+  const beyondColor = variant === "light" ? "#f8fafc" : "#f8fafc";
+  const bordersColor = "#dfc29c";
+  const subtext = variant === "light" ? "rgba(255,255,255,0.72)" : "#64748b";
+
   return (
-    <div className={`inline-flex overflow-hidden ${sizing.wrap}`}>
+    <div className={`inline-flex items-center justify-center ${bgClass} ${sizing.wrap}`}>
       <svg
-        viewBox="0 0 174 88"
+        viewBox="0 0 260 72"
         className={sizing.art}
         role="img"
         aria-label="Beyond Borders"
       >
-        <defs>
-          <linearGradient id="bb-ocean" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#5f86e9" />
-            <stop offset="55%" stopColor="#3552f0" />
-            <stop offset="100%" stopColor="#2340d8" />
-          </linearGradient>
-        </defs>
-        <rect width="174" height="88" rx="18" fill="#21378c" />
         <text
-          x="87"
-          y="25"
-          textAnchor="middle"
-          fill="#ffffff"
-          fontSize="20"
-          fontWeight="900"
-          letterSpacing="-0.8"
-        >
-          BEYOND
-        </text>
-        <text
-          x="87"
-          y="52"
-          textAnchor="middle"
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="1"
-          fontSize="18"
+          x="118"
+          y="42"
+          textAnchor="end"
+          fill={beyondColor}
+          fontSize="22"
           fontWeight="500"
-          letterSpacing="1"
+          letterSpacing="-0.6"
         >
-          BORDERS
+          Beyond
         </text>
-        <path
-          d="M28 103 C52 54, 122 54, 148 103 Z"
-          fill="url(#bb-ocean)"
-          opacity="0.98"
-        />
-        <path d="M40 86 C56 60, 118 60, 134 86" fill="none" stroke="#101522" strokeWidth="1.1" opacity="0.9" />
-        <path d="M28 88 C50 50, 124 50, 146 88" fill="none" stroke="#101522" strokeWidth="1.1" opacity="0.9" />
-        <path d="M18 90 C46 40, 128 40, 156 90" fill="none" stroke="#101522" strokeWidth="1.1" opacity="0.9" />
-        <path d="M87 38 C82 54, 81 70, 82 90" fill="none" stroke="#101522" strokeWidth="1.1" opacity="0.9" />
-        <path d="M66 43 C61 57, 58 72, 56 90" fill="none" stroke="#101522" strokeWidth="1.1" opacity="0.9" />
-        <path d="M108 43 C113 57, 116 72, 118 90" fill="none" stroke="#101522" strokeWidth="1.1" opacity="0.9" />
-        <path d="M41 74 C52 71, 61 72, 68 77 C76 84, 82 81, 89 75 C95 71, 104 70, 112 74 C119 78, 126 77, 132 71 C138 66, 146 67, 152 74 L152 88 L41 88 Z" fill="#7ea0ef" opacity="0.95" />
-        <path d="M72 66 C76 62, 82 64, 83 70 C84 75, 90 77, 91 82 C92 87, 88 90, 83 89 C78 88, 75 83, 74 78 C73 74, 68 70, 72 66 Z" fill="#2f4eee" opacity="0.95" />
-        <path d="M120 72 C126 67, 133 68, 136 75 C138 80, 143 81, 145 86 C147 90, 143 92, 138 92 C133 91, 130 87, 129 83 C128 78, 121 77, 120 72 Z" fill="#94b1f5" opacity="0.95" />
+        <text
+          x="122"
+          y="42"
+          textAnchor="start"
+          fill={bordersColor}
+          fontSize="22"
+          fontWeight="500"
+          letterSpacing="-0.6"
+        >
+          Borders
+        </text>
+
         {!compact && (
           <text
-            x="87"
-            y="82"
+            x="130"
+            y="62"
             textAnchor="middle"
-            fill="rgba(255,255,255,0.85)"
-            fontSize="4.5"
-            fontWeight="700"
-            letterSpacing="1.8"
+            fill={subtext}
+            fontSize="6.5"
+            fontWeight="600"
+            letterSpacing="2.1"
+            style={{ textTransform: "uppercase" }}
           >
-            HUMANITARIAN IDENTITY PLATFORM
+            Humanitarian Identity Platform
           </text>
         )}
       </svg>

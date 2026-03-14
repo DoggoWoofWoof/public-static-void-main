@@ -2,8 +2,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.core.deps import get_current_user, require_permission
-from app.core.security import Permission, User
+from app.core.deps import get_current_user
+from app.core.security import User
 from app.schemas.referral import ReferralCreate, ReferralUpdate
 from app.services.referral_service import ReferralService
 
@@ -25,6 +25,6 @@ async def create_referral(
 async def update_referral(
     referral_id: str,
     ref_in: ReferralUpdate,
-    current_user: Annotated[User, Depends(require_permission(Permission.CASE_MANAGER))],
+    current_user: Annotated[User, Depends(get_current_user)],
 ):
     return await referral_service.update_referral(referral_id, ref_in, current_user)

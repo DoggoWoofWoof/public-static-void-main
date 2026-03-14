@@ -8,6 +8,12 @@ class ReferralType(str, Enum):
     CONSULTATION = "consultation"
     TRANSFER = "transfer"
     NOTIFICATION = "notification"
+    EMPLOYMENT = "employment"
+    HOUSING = "housing"
+    EDUCATION = "education"
+    LEGAL_AID = "legal_aid"
+    HEALTHCARE = "healthcare"
+    LANGUAGE = "language"
 
 class ReferralStatus(str, Enum):
     OPEN = "open"
@@ -18,8 +24,8 @@ class ReferralStatus(str, Enum):
 class ReferralBase(BaseModel):
     case_id: str
     referral_type: ReferralType
-    from_agency: str
-    to_agency: str
+    from_agency: Optional[str] = None
+    to_agency: Optional[str] = None
     reason: Optional[str] = None
 
 class ReferralCreate(ReferralBase):

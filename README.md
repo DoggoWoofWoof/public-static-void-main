@@ -284,6 +284,50 @@ docker compose up --build
 
 This starts the FastAPI app on port `8000`.
 
+## Render deployment
+
+This repository now includes a root [render.yaml](C:/Users/Swastik/Desktop/public-static-void-main/render.yaml) for deploying:
+
+- a Python backend service from `backend/`
+- a static frontend site from `frontend/`
+
+### What is already wired
+
+- The frontend reads its API base URL from `VITE_API_BASE_URL`
+- The backend reads `CORS_ORIGINS` from environment configuration
+- The backend JWT secret can be provided by Render through `JWT_SECRET`
+- The static frontend includes an SPA rewrite so React Router routes work on refresh
+
+### Deploy steps
+
+1. Push this repository to GitHub.
+2. In Render, choose `New +` -> `Blueprint`.
+3. Connect the GitHub repository.
+4. Select the repo and let Render read `render.yaml`.
+5. Create the services.
+
+Render will provision:
+
+- `beyond-borders-api`
+- `beyond-borders-web`
+
+### Important after creating services
+
+If you rename either Render service, update the URLs in [render.yaml](C:/Users/Swastik/Desktop/public-static-void-main/render.yaml):
+
+- `CORS_ORIGINS` on the API service
+- `VITE_API_BASE_URL` on the frontend service
+
+### Expected public URLs
+
+After deployment, you will access the app through a public Render URL such as:
+
+- `https://beyond-borders-web.onrender.com`
+
+And the frontend will call the backend at:
+
+- `https://beyond-borders-api.onrender.com`
+
 ## Database setup
 
 The project contains SQL assets under `db/`.

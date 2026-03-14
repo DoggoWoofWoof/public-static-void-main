@@ -16,13 +16,21 @@ class ReferralService:
         self.audit_repo = AuditRepo()
         self.case_service = CaseService()
 
+    @staticmethod
+    def _can_manage_referrals(current_user: User) -> bool:
+        if current_user.role == Role.AUTHORITY and Permission.CASE_MANAGER in current_user.permissions:
+            return True
+        if current_user.role == Role.PARTNER and Permission.PARTNER_SERVICE_OFFICER in current_user.permissions:
+            return True
+        return False
+
     async def create_referral(self, case_id: str, referral_in: ReferralCreate, current_user: User) -> dict:
         case = await self.case_service.get_case(case_id)
         
         # Governance constraint: "no employment referral without case-manager approval"
         # Since only case managers can approve, and creating essentially starts this process:
-        if current_user.role != Role.AUTHORITY or Permission.CASE_MANAGER not in current_user.permissions:
-             raise HTTPException(status_code=403, detail="Only Case Managers can create referrals.")
+        if not self._can_manage_referrals(current_user):
+             raise HTTPException(status_code=403, detail="Only case managers or approved partner officers can create referrals.")
         
         referral_data = referral_in.model_dump()
         referral_data["case_id"] = case_id
@@ -36,7 +44,10 @@ class ReferralService:
             action="create_referral",
             user=current_user.id,
             case_id=case_id,
-            details={"to_agency": referral_data["to_agency"]}
+            details={
+                "to_agency": referral_data.get("to_agency"),
+                "referral_type": referral_data.get("referral_type"),
+            }
         )
         
         # Transition case to referred
@@ -46,8 +57,8 @@ class ReferralService:
         return created
 
     async def update_referral(self, referral_id: str, update_in: ReferralUpdate, current_user: User) -> dict:
-        if current_user.role != Role.AUTHORITY or Permission.CASE_MANAGER not in current_user.permissions:
-            raise HTTPException(status_code=403, detail="Only Case Managers can update referrals.")
+        if not self._can_manage_referrals(current_user):
+            raise HTTPException(status_code=403, detail="Only case managers or approved partner officers can update referrals.")
 
         referral = await self.repo.find_by_id(referral_id)
         if not referral:
