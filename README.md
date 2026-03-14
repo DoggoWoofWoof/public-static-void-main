@@ -1,6 +1,6 @@
-# BorderBridge
+# BeyondBorders
 
-BorderBridge is a full-stack case management and identity-confidence platform for displaced people. It combines a React frontend, a FastAPI backend, JSON seed data for local/demo mode, and database assets for a Supabase/Postgres-backed deployment.
+BeyondBorders is a full-stack case management and identity-confidence platform for displaced people. It combines a React frontend, a FastAPI backend, JSON seed data for local/demo mode, and database assets for a Supabase/Postgres-backed deployment.
 
 The project models how authorities, reviewers, case managers, partner organizations, and refugees can collaborate on identity reconstruction, evidence review, scoring, announcements, and referrals in a transparent workflow.
 
