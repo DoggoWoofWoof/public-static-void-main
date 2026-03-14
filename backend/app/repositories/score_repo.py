@@ -13,6 +13,16 @@ class ScoreRepo:
     def __init__(self, store: JsonStore | None = None) -> None:
         self.store = store or JsonStore()
 
+    async def find_by_case(self, case_id: str) -> list[dict]:
+        scores = [
+            item for item in self.store.load(self.TABLE)
+            if item.get("case_id") == case_id
+        ]
+        return sorted(
+            scores,
+            key=lambda item: item.get("computed_at") or item.get("created_at") or datetime.min.isoformat(),
+        )
+
     async def find_latest(self, case_id: str) -> dict | None:
         scores = [
             item for item in self.store.load(self.TABLE)

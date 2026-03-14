@@ -10,6 +10,22 @@ import { getCaseTimeline, getCase, listCases } from "../../lib/api";
 
 type TimelineEntry = Record<string, unknown>;
 
+function formatValue(value: unknown): string {
+  if (value === null || value === undefined || value === "") return "—";
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => formatValue(item))
+      .filter((item) => item !== "—")
+      .join(", ");
+  }
+  if (typeof value === "object") {
+    return Object.entries(value as Record<string, unknown>)
+      .map(([key, item]) => `${key.replace(/_/g, " ")}: ${formatValue(item)}`)
+      .join(", ");
+  }
+  return String(value);
+}
+
 function eventIcon(kind: string) {
   const k = kind.toLowerCase();
   if (k.includes("arrival") || k.includes("intake") || k.includes("created")) return MapPin;
@@ -51,7 +67,7 @@ export const CaseTimelinePage = () => {
     if (!id) {
       try {
         const cases = await listCases();
-        if (cases.length > 0) id = String(cases[0].id ?? "");
+        if (cases.length > 0) id = String(cases[0].case_id ?? cases[0].id ?? "");
       } catch {
         setError("No cases found.");
         setLoading(false);
@@ -65,7 +81,8 @@ export const CaseTimelinePage = () => {
         getCase(id),
         getCaseTimeline(id),
       ]);
-      setCasePersonId(String(caseData.person_id ?? id));
+      const person = (caseData.person as Record<string, unknown> | undefined) ?? {};
+      setCasePersonId(String(person.name ?? caseData.person_id ?? id));
       setCaseStatus(String(caseData.status ?? "—"));
       setTimeline(events);
     } catch (err: unknown) {
@@ -140,20 +157,20 @@ export const CaseTimelinePage = () => {
             ) : (
               <>
                 {/* Connecting line */}
-                <div className="absolute left-12 sm:left-[88px] top-24 bottom-24 w-1 bg-gradient-to-b from-blue-500 via-indigo-500 to-gray-200 dark:to-gray-800 rounded-full" />
+                <div className="absolute left-[92px] sm:left-[118px] top-24 bottom-24 w-1 -translate-x-1/2 bg-gradient-to-b from-blue-500 via-indigo-500 to-gray-200 dark:to-gray-800 rounded-full" />
 
                 <div className="space-y-12">
                   {timeline.map((event, idx) => {
                     const kind = String(event.kind ?? event.event_type ?? event.action ?? "event");
-                    const detail = String(event.detail ?? event.description ?? event.payload ?? "");
+                    const detail = formatValue(event.detail ?? event.description ?? event.payload ?? "");
                     const ts = String(event.timestamp ?? event.created_at ?? "");
                     const Icon = eventIcon(kind);
                     const color = eventColor(kind);
                     const isLast = idx === timeline.length - 1;
 
                     return (
-                      <div key={idx} className="relative flex gap-6 sm:gap-12">
-                        <div className="relative z-10 flex flex-col items-center">
+                      <div key={idx} className="relative grid grid-cols-[120px_minmax(0,1fr)] gap-6 sm:grid-cols-[140px_minmax(0,1fr)] sm:gap-12">
+                        <div className="relative z-10 flex min-w-0 flex-col items-center">
                           <div className={`h-12 w-12 rounded-full ${color} border-4 border-white dark:border-gray-900 flex items-center justify-center shadow-md shrink-0`}>
                             <Icon className="h-5 w-5 text-white" />
                           </div>
@@ -163,7 +180,7 @@ export const CaseTimelinePage = () => {
                             </div>
                           )}
                         </div>
-                        <div className={`flex-1 pt-1 ${isLast ? "" : ""}`}>
+                        <div className={`min-w-0 pt-1 ${isLast ? "" : ""}`}>
                           <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 capitalize">
                             {kind.replace(/_/g, " ")}
                           </h3>
@@ -181,7 +198,7 @@ export const CaseTimelinePage = () => {
                                   .map(([k, v]) => (
                                     <div key={k} className="flex gap-2 text-sm">
                                       <dt className="text-gray-500 font-medium capitalize">{k.replace(/_/g, " ")}:</dt>
-                                      <dd className="text-gray-700 dark:text-gray-300">{String(v)}</dd>
+                                      <dd className="text-gray-700 dark:text-gray-300">{formatValue(v)}</dd>
                                     </div>
                                   ))}
                               </dl>

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import (
+    auth,
     cases,
     evidence,
     family_links,
@@ -34,6 +35,7 @@ async def health_check():
 
 # Register routers
 app.include_router(cases.router)
+app.include_router(auth.router)
 app.include_router(evidence.router)
 app.include_router(family_links.router)
 app.include_router(documents.router)

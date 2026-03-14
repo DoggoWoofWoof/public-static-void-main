@@ -1,16 +1,34 @@
 # backend/app/core/deps.py
 from typing import Annotated
-from fastapi import Header, HTTPException, Depends
-from app.core.security import get_demo_user, User, Permission
 
-# A mock dependency to get the current user based on a header token (username in this demo)
-async def get_current_user(x_demo_username: Annotated[str, Header()] = "auth_manager") -> User:
+from fastapi import Depends, Header, HTTPException
+
+from app.core.security import (
+    Permission,
+    User,
+    decode_access_token,
+    get_demo_user,
+    user_from_claims,
+)
+
+
+async def get_current_user(
+    authorization: Annotated[str | None, Header()] = None,
+    x_demo_username: Annotated[str, Header()] = "auth_manager",
+) -> User:
+    if authorization and authorization.lower().startswith("bearer "):
+        token = authorization.split(" ", 1)[1]
+        user = user_from_claims(decode_access_token(token))
+        if user:
+            return user
+        raise HTTPException(status_code=401, detail="Invalid or expired bearer token.")
+
     user = get_demo_user(x_demo_username)
     if not user:
-         raise HTTPException(status_code=401, detail="Invalid Demo Username provided in X-Demo-Username header.")
+        raise HTTPException(status_code=401, detail="Invalid Demo Username provided in X-Demo-Username header.")
     return user
 
-# Dependency factory for checking permissions
+
 def require_permission(required_permission: Permission):
     def permission_checker(current_user: Annotated[User, Depends(get_current_user)]) -> User:
         if required_permission not in current_user.permissions:

@@ -361,5 +361,53 @@
     "created_at": "2026-03-14T04:14:20.247396+00:00",
     "reviewed_at": "2026-03-14T04:14:20.251079+00:00",
     "reviewed_by": "auth_manager_1"
+  },
+  {
+    "id": "357f4712-f0b7-476a-9696-bb52c84bc21a",
+    "case_id": "2cafe265-380e-4379-bf95-0b8dac0d6375",
+    "evidence_type": "government_record",
+    "trust_class": "official",
+    "source": "authority",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-14T04:51:18.082807+00:00",
+    "reviewed_at": "2026-03-14T04:51:18.148278+00:00",
+    "reviewed_by": "auth_manager_1"
+  },
+  {
+    "id": "6b229630-cd98-4b2f-afc8-269d01822e3d",
+    "case_id": "5b7ecb25-27bf-435e-a4d2-388041f2f816",
+    "evidence_type": "government_record",
+    "trust_class": "official",
+    "source": "authority",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-14T04:52:57.115774+00:00",
+    "reviewed_at": "2026-03-14T04:52:57.149354+00:00",
+    "reviewed_by": "auth_manager_1"
+  },
+  {
+    "id": "02c85dde-7766-4e13-9450-358cdb065cc6",
+    "case_id": "53e3afba-4c6b-4676-98e2-734c82c67a6d",
+    "evidence_type": "government_record",
+    "trust_class": "official",
+    "source": "authority",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-14T04:58:49.681414+00:00",
+    "reviewed_at": "2026-03-14T04:58:49.720517+00:00",
+    "reviewed_by": "auth_manager_1"
+  },
+  {
+    "id": "de3c740b-4417-440f-902b-5d14f5f47b5d",
+    "case_id": "a537a584-0a19-43ad-ad12-6dc3998c03d2",
+    "evidence_type": "government_record",
+    "trust_class": "official",
+    "source": "authority",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-14T05:18:40.755773+00:00",
+    "reviewed_at": "2026-03-14T05:18:40.846086+00:00",
+    "reviewed_by": "auth_manager_1"
   }
 ]

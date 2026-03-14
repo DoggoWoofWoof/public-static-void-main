@@ -408,5 +408,89 @@
       "new_state": "accepted"
     },
     "created_at": "2026-03-13T21:44:20.029666+00:00"
+  },
+  {
+    "id": "37b94106-8231-417d-bd68-1d31710eed41",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "2cafe265-380e-4379-bf95-0b8dac0d6375",
+    "details": {
+      "type": "government_record",
+      "class": "official"
+    },
+    "created_at": "2026-03-14T04:51:18.104986+00:00"
+  },
+  {
+    "id": "29c6f9da-1935-48df-badd-ad5c43f473f8",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "2cafe265-380e-4379-bf95-0b8dac0d6375",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-14T04:51:18.150646+00:00"
+  },
+  {
+    "id": "f733c070-782d-4dfc-b76e-90766d5b2de9",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "5b7ecb25-27bf-435e-a4d2-388041f2f816",
+    "details": {
+      "type": "government_record",
+      "class": "official"
+    },
+    "created_at": "2026-03-14T04:52:57.118565+00:00"
+  },
+  {
+    "id": "a775fe02-02ce-42c5-8d5f-43b7664a9c25",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "5b7ecb25-27bf-435e-a4d2-388041f2f816",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-14T04:52:57.153004+00:00"
+  },
+  {
+    "id": "0028c68f-0384-4063-b564-ce2d77e98032",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "53e3afba-4c6b-4676-98e2-734c82c67a6d",
+    "details": {
+      "type": "government_record",
+      "class": "official"
+    },
+    "created_at": "2026-03-14T04:58:49.685758+00:00"
+  },
+  {
+    "id": "64355430-9818-44f2-b62b-b78fdbdbaf49",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "53e3afba-4c6b-4676-98e2-734c82c67a6d",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-14T04:58:49.723563+00:00"
+  },
+  {
+    "id": "29a37db2-5aaa-4add-8bfe-e563972fc0c7",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "a537a584-0a19-43ad-ad12-6dc3998c03d2",
+    "details": {
+      "type": "government_record",
+      "class": "official"
+    },
+    "created_at": "2026-03-14T05:18:40.764756+00:00"
+  },
+  {
+    "id": "e0909b77-51ec-4ce9-9981-a94d57abb1c7",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "a537a584-0a19-43ad-ad12-6dc3998c03d2",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-14T05:18:40.862394+00:00"
   }
 ]

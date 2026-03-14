@@ -36,9 +36,13 @@ export const EvidenceReviewPage = () => {
       // Load evidence for each case, keep only pending items
       const evidenceLists = await Promise.all(
         cases.slice(0, 10).map((c) =>
-          listEvidence(String(c.id ?? "")).then((ev) =>
+          listEvidence(String(c.case_id ?? c.id ?? "")).then((ev) =>
             // Attach case info to each evidence item
-            ev.map((e) => ({ ...e, _case_id: c.id, _person_id: c.person_id } as EvidenceItem))
+            ev.map((e) => ({
+              ...e,
+              _case_id: c.case_id ?? c.id,
+              _person_id: (c.person as Record<string, unknown> | undefined)?.name ?? c.person_id,
+            } as EvidenceItem))
           ).catch(() => [] as EvidenceItem[])
         )
       );

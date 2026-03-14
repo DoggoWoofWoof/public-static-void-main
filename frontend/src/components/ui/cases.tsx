@@ -171,12 +171,19 @@ export const CasesPage = () => {
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                 {cases.map((c) => {
-                  const id = String(c.id ?? c.case_code ?? "");
-                  const caseCode = String(c.case_code ?? c.id ?? "");
-                  const personId = String(c.person_id ?? "");
-                  const intakeLoc = String(c.intake_location ?? "—");
+                  const id = String(c.case_id ?? c.id ?? c.case_code ?? "");
+                  const caseCode = String(c.case_code ?? c.case_id ?? c.id ?? "");
+                  const person = (c.person as Record<string, unknown> | undefined) ?? {};
+                  const personId = String(person.name ?? c.person_id ?? id);
+                  const intakeLoc = String(c.intake_location ?? c.owner_agency ?? "—");
                   const status = String(c.status ?? "");
-                   const rawScore = c.latest_score != null ? Number(c.latest_score) : NaN;
+                  const latestScore = c.latest_score as Record<string, unknown> | number | null | undefined;
+                  const rawScore =
+                    typeof latestScore === "number"
+                      ? latestScore
+                      : latestScore && typeof latestScore === "object"
+                        ? Number(latestScore.predicted_score ?? NaN)
+                        : NaN;
                   const score = !isNaN(rawScore) ? rawScore : null;
                   return (
                     <tr key={id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">

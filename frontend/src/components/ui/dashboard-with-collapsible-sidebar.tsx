@@ -71,7 +71,7 @@ export const AuthorityDashboard = () => {
   return (
     <AuthorityLayout
       title="Dashboard"
-      subtitle="Overview of Border Actions and Case Flow"
+      subtitle="Overview of protected border actions and case flow"
       headerActions={
         <div className="flex items-center gap-3">
           {/* Backend health indicator */}
@@ -166,7 +166,7 @@ export const AuthorityDashboard = () => {
                 <BarChart3 className="h-4 w-4 text-white" />
               </div>
               <div className="mt-3 text-center">
-                <p className="text-sm font-bold text-gray-900 dark:text-white">Verified Score</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white">Manual Verification</p>
                 <p className="text-xs text-gray-500 font-medium">{loading ? "…" : `${verifiedCount} Verified`}</p>
               </div>
             </div>
@@ -201,8 +201,9 @@ export const AuthorityDashboard = () => {
               </div>
             ) : (
               recentCases.map((c) => {
-                const id = String(c.id ?? "");
-                const personId = String(c.person_id ?? id);
+                const id = String(c.case_id ?? c.id ?? "");
+                const person = (c.person as Record<string, unknown> | undefined) ?? {};
+                const personId = String(person.name ?? c.person_id ?? id);
                 const status = String(c.status ?? "");
                 return (
                   <Link
@@ -254,7 +255,7 @@ export const AuthorityDashboard = () => {
             <h3 className="text-lg font-semibold mb-4 border-b border-gray-100 dark:border-gray-800 pb-2">Quick Actions</h3>
             <ul className="space-y-3">
               {[
-                { label: "Score Cases", href: "/scoring", icon: BarChart3 },
+                { label: "Manual Verification", href: "/scoring", icon: BarChart3 },
                 { label: "Evidence Review", href: "/evidence", icon: FileText },
                 { label: "Referrals", href: "/referrals", icon: Users },
                 { label: "Announcements", href: "/announcements", icon: Monitor },

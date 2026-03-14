@@ -16,11 +16,11 @@ import {
   TrendingDown,
   TrendingUp,
   Loader2,
-  Share2,
   X,
   FileCheck
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import { EvidenceGraph } from "./evidence-graph";
 import { GradientButton } from "./gradient-button";
 import { ShaderAnimation } from "./shader-animation";
 import {
@@ -259,8 +259,9 @@ export const CaseDetail = () => {
   }
 
   const status = String(caseData.status ?? "");
-  const personId = String(caseData.person_id ?? "");
-  const intakeLoc = String(caseData.intake_location ?? "");
+  const person = (caseData.person as Record<string, unknown> | undefined) ?? {};
+  const personId = String(person.name ?? caseData.person_id ?? "");
+  const intakeLoc = String(caseData.intake_location ?? caseData.owner_agency ?? "");
   const ownerAgency = String(caseData.owner_agency ?? "");
   const caseCode = String(caseData.case_code ?? caseId);
 
@@ -527,27 +528,7 @@ export const CaseDetail = () => {
               )}
             </section>
 
-            {/* Identity Graph placeholder */}
-            <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm overflow-hidden flex flex-col h-[280px]">
-              <div className="px-6 py-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Identity Evidence Graph</h2>
-                <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <Share2 className="h-4 w-4 text-gray-500" />
-                </div>
-              </div>
-              <div className="flex-1 bg-gray-50/50 dark:bg-gray-800/20 relative overflow-hidden flex items-center justify-center p-6">
-                <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50" />
-                <div className="relative z-10 text-center text-gray-400">
-                  <div className="h-16 w-16 bg-blue-600 rounded-full shadow-lg border-4 border-white flex items-center justify-center mx-auto mb-3">
-                    <User className="h-6 w-6 text-white" />
-                  </div>
-                  <p className="font-semibold text-gray-600 dark:text-gray-300">{personId}</p>
-                  <p className="text-xs mt-1">
-                    {evidence.length} evidence item{evidence.length !== 1 ? "s" : ""} linked
-                  </p>
-                </div>
-              </div>
-            </section>
+            <EvidenceGraph personName={personId} evidence={evidence} />
           </div>
         </div>
 

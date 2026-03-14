@@ -36,9 +36,10 @@ export const ScoringPage = () => {
       const cases = await listCases();
       if (cases.length > 0) {
         const first = cases[0];
-        const id = String(first.id ?? "");
+        const id = String(first.case_id ?? first.id ?? "");
+        const person = (first.person as Record<string, unknown> | undefined) ?? {};
         setCaseId(id);
-        setCaseLabel(String(first.person_id ?? id));
+        setCaseLabel(String(person.name ?? first.person_id ?? id));
       } else {
         setError("No cases found. Register a case first.");
         setLoading(false);
@@ -97,8 +98,8 @@ export const ScoringPage = () => {
 
   return (
     <AuthorityLayout
-      title="Identity Confidence Engine"
-      subtitle="Analyze how identity scores are calculated and dynamically updated."
+      title="Manual Verification"
+      subtitle="Review explainable random forest signals alongside officer-led verification."
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
@@ -112,7 +113,7 @@ export const ScoringPage = () => {
                   {caseLabel || "Loading case…"}
                 </h2>
                 <p className="text-gray-500 dark:text-gray-400">
-                  {caseId ? `Case ${caseId} • Scoring Analysis` : "Loading…"}
+                  {caseId ? `Case ${caseId} • Verification analysis` : "Loading…"}
                 </p>
               </div>
 
@@ -257,7 +258,7 @@ export const ScoringPage = () => {
 
           {/* Score Ranges Guide */}
           <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-6 shadow-sm text-white">
-            <h3 className="font-semibold mb-2">Score Ranges Guide</h3>
+              <h3 className="font-semibold mb-2">Verification bands guide</h3>
             <ul className="text-sm space-y-3 opacity-90">
               <li className="flex justify-between border-b border-white/10 pb-2">
                 <span className="text-red-300 font-medium">0–39</span> <span>Under Review</span>
