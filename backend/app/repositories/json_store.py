@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from json import JSONDecodeError
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -39,8 +40,11 @@ class JsonStore:
         if not path.exists():
             return []
 
-        with path.open("r", encoding="utf-8") as handle:
-            data = json.load(handle)
+        try:
+            with path.open("r", encoding="utf-8") as handle:
+                data = json.load(handle)
+        except JSONDecodeError:
+            return []
 
         return data if isinstance(data, list) else []
 

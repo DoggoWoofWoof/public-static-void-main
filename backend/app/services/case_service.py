@@ -32,14 +32,21 @@ class CaseService:
         # Support both payload styles:
         # new-style: person is a nested dict with name, nationality, etc.
         # old-style / test-style: person_id is a flat string, no nested person dict
-        person = data.person or {}
-        if not person and data.person_id:
+        person = {}
+        if data.person is not None:
+            person = {
+                "name": data.person.primary_name,
+                "nationality": data.person.nationality,
+                "language": data.person.primary_language,
+                "date_of_birth": data.person.dob.isoformat() if data.person.dob else None,
+            }
+        elif data.person_id:
             person = {"person_id": data.person_id}
 
         payload = await self.case_repo.insert(
             {
                 "person": person,
-                "status": data.status or "intake_created",
+                "status": data.status.value,
                 "created_by": created_by,
             }
         )

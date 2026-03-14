@@ -1,31 +1,34 @@
 from fastapi.testclient import TestClient
+
 from app.main import app
-import builtins
 
-# Force unbuffered output immediately
-import sys
-sys.stdout.reconfigure(line_buffering=True)
-sys.stderr.reconfigure(line_buffering=True)
+def test_create_case_then_referral():
+    client = TestClient(app)
+    headers = {"X-Demo-Username": "auth_manager"}
 
-print("Init TestClient...")
-client = TestClient(app)
+    case_res = client.post(
+        "/cases",
+        json={
+            "person": {"name": "Test"},
+            "status": "intake_created",
+        },
+        headers=headers,
+    )
+    assert case_res.status_code in (200, 201)
 
-print("POST /cases")
-case = client.post("/cases", json={
-    "person_id": "new",
-    "person": {"name": "Test"},
-    "status": "intake_created"
-}).json()
-cid = case["case_id"]
-print("Created:", cid)
+    case = case_res.json()
+    assert "case_id" in case
+    cid = case["case_id"]
 
-print(f"POST /cases/{cid}/referrals")
-res = client.post(f"/cases/{cid}/referrals", json={
-    "case_id": cid,
-    "referral_type": "referral",
-    "from_agency": "UNHCR",
-    "to_agency": "Country X",
-    "reason": "Passed"
-})
-print("Referral Status:", res.status_code)
-print("Referral Body:", res.text)
+    referral_res = client.post(
+        f"/cases/{cid}/referrals",
+        json={
+            "case_id": cid,
+            "referral_type": "referral",
+            "from_agency": "UNHCR",
+            "to_agency": "Country X",
+            "reason": "Passed",
+        },
+        headers=headers,
+    )
+    assert referral_res.status_code in (200, 201)

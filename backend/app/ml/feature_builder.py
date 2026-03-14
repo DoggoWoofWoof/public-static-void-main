@@ -89,7 +89,9 @@ def build_features(
 
     if family_links:
         features["verified_family_links_count"] = sum(
-            1 for link in family_links if link.get("trust_state") == "verified"
+            1
+            for link in family_links
+            if (link.get("link_status") or link.get("trust_state")) == "verified"
         )
 
     if documents:

@@ -1,7 +1,9 @@
-# backend/app/schemas/case.py
-from pydantic import BaseModel, ConfigDict
 from enum import Enum
-from typing import Optional, Any
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, model_validator
+
+from app.schemas.person import PersonCreate
 
 class CaseStatus(str, Enum):
     INTAKE_CREATED = "intake_created"
@@ -17,10 +19,15 @@ class CaseBase(BaseModel):
     owner_agency: Optional[str] = None
 
 class CaseCreate(CaseBase):
-    # Accept either a nested person dict OR a bare person_id (tests use person_id)
-    person: Optional[dict] = None
+    person: Optional[PersonCreate] = None
     person_id: Optional[str] = None
-    status: Optional[str] = "intake_created"
+    status: CaseStatus = CaseStatus.INTAKE_CREATED
+
+    @model_validator(mode="after")
+    def validate_person_source(self) -> "CaseCreate":
+        if self.person is None and self.person_id is None:
+            raise ValueError("Provide one of person or person_id")
+        return self
 
 class Case(CaseBase):
     id: str

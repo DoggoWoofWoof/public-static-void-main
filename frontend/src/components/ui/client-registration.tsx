@@ -279,7 +279,10 @@ const RegistrationContent = ({ isDark, setIsDark }: RegistrationContentProps) =>
     try {
       const { createCase } = await import("../../lib/api");
       const created = await createCase({
-        person_id: fullName.trim().toLowerCase().replace(/\s+/g, "-"),
+        person: {
+          name: fullName.trim(),
+        },
+        status: "intake_created",
         intake_location: intakeLocation || undefined,
         owner_agency: agency || undefined,
       });

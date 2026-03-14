@@ -45,8 +45,10 @@ class SupabaseCaseRepo:
             "person_dob": data.get("person", {}).get("date_of_birth"),
             "created_by": data.get("created_by"),
         }
-        inserted = get_client().table("cases").insert(payload).execute().data[0]
-        return await self.find_by_id(inserted["id"])
+        result = get_client().table("cases").insert(payload).execute()
+        if not result.data:
+            raise RuntimeError("Insert returned no data")
+        return await self.find_by_id(result.data[0]["id"])
 
 
 class SupabaseEvidenceRepo:

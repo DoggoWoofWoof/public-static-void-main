@@ -272,9 +272,14 @@ export const CaseDetail = () => {
   const explanation = scoreData
     ? ((scoreData as Record<string, unknown>).explanation as Record<string, unknown> | null)
     : null;
-  const constraints = explanation
-    ? (explanation.constraints as string[] | undefined)
+  const topLevelConstraints = scoreData
+    ? ((scoreData as Record<string, unknown>).blocking_constraints as string[] | undefined)
     : undefined;
+  const constraints = topLevelConstraints && topLevelConstraints.length > 0
+    ? topLevelConstraints
+    : explanation
+      ? (explanation.constraints as string[] | undefined)
+      : undefined;
 
   return (
     <div className="relative flex min-h-screen w-full overflow-hidden bg-gray-50/50 dark:bg-gray-950 font-sans">

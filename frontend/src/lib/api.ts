@@ -44,7 +44,15 @@ export function getCase(caseId: string) {
 
 /** Create a new case. POST /cases body: { person_id, intake_location, owner_agency } */
 export function createCase(body: {
-  person_id: string;
+  person_id?: string;
+  person?: {
+    primary_name?: string;
+    name?: string;
+    nationality?: string;
+    language?: string;
+    date_of_birth?: string;
+  };
+  status?: string;
   intake_location?: string;
   owner_agency?: string;
 }) {

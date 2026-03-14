@@ -7,7 +7,7 @@ from app.repositories.audit_repo import AuditRepo
 from app.schemas.referral import ReferralCreate, ReferralUpdate, ReferralStatus
 from app.services.case_service import CaseService
 from app.schemas.case import CaseStatus
-from app.core.security import Permission, User
+from app.core.security import Permission, Role, User
 
 class ReferralService:
     def __init__(self):
@@ -21,10 +21,11 @@ class ReferralService:
         
         # Governance constraint: "no employment referral without case-manager approval"
         # Since only case managers can approve, and creating essentially starts this process:
-        if current_user.role != "authority" or Permission.CASE_MANAGER not in current_user.permissions:
+        if current_user.role != Role.AUTHORITY or Permission.CASE_MANAGER not in current_user.permissions:
              raise HTTPException(status_code=403, detail="Only Case Managers can create referrals.")
         
         referral_data = referral_in.model_dump()
+        referral_data["case_id"] = case_id
         referral_data["status"] = ReferralStatus.OPEN.value
         referral_data["created_by"] = current_user.id
         referral_data["created_at"] = datetime.now(timezone.utc).isoformat()
@@ -45,6 +46,9 @@ class ReferralService:
         return created
 
     async def update_referral(self, referral_id: str, update_in: ReferralUpdate, current_user: User) -> dict:
+        if current_user.role != Role.AUTHORITY or Permission.CASE_MANAGER not in current_user.permissions:
+            raise HTTPException(status_code=403, detail="Only Case Managers can update referrals.")
+
         referral = await self.repo.find_by_id(referral_id)
         if not referral:
              raise HTTPException(status_code=404, detail="Referral not found")

@@ -274,18 +274,16 @@ const PortalContent = ({ isDark, setIsDark }: PortalContentProps) => {
                   {/* Avatar & Basic Info Card */}
                   <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm flex-1">
                     {/* Banner */}
-                    <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-600 relative overflow-hidden">
+                    <div className="h-40 bg-gradient-to-r from-blue-600 to-indigo-600 relative overflow-hidden">
                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+                       <div className="absolute left-6 bottom-6 w-24 h-24 rounded-full border-4 border-white dark:border-gray-900 bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-4xl shadow-md overflow-hidden">
+                         <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=Anna&backgroundColor=e2e8f0`} alt="Avatar" className="w-full h-full object-cover" />
+                       </div>
                     </div>
                     
                     <div className="px-6 pb-6 relative">
-                      {/* Avatar */}
-                      <div className="w-24 h-24 rounded-full border-4 border-white dark:border-gray-900 bg-gray-100 dark:bg-gray-700 absolute -top-12 flex items-center justify-center text-4xl shadow-md overflow-hidden">
-                        <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=Anna&backgroundColor=e2e8f0`} alt="Avatar" className="w-full h-full object-cover" />
-                      </div>
-                      
                       {/* Bio */}
-                      <div className="mt-14">
+                      <div className="mt-6">
                         <div className="flex items-center gap-2">
                           <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Anna K.</h3>
                           <CheckCircle2 className="w-5 h-5 text-blue-500" />

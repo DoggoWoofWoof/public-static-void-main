@@ -29,7 +29,6 @@ export const AnnouncementsPage = () => {
   // Create form
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
-  const [audience, setAudience] = useState("All Active Cases");
   const [timing, setTiming] = useState("immediate");
   const [submitting, setSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{ ok: boolean; message: string } | null>(null);
@@ -51,7 +50,7 @@ export const AnnouncementsPage = () => {
       const caseList = await listCases();
       setCases(caseList);
       if (caseList.length > 0) {
-        const firstId = String(caseList[0].id ?? "");
+        const firstId = String(caseList[0].case_id ?? caseList[0].id ?? "");
         setSelectedCaseId(firstId);
         await loadAnnouncements(firstId);
       }
@@ -76,11 +75,12 @@ export const AnnouncementsPage = () => {
     setSubmitResult(null);
     try {
       const created = await createAnnouncement({
-        case_id: selectedCaseId,
         title: title.trim(),
-        message: message.trim(),
-        audience,
-        timing,
+        body: message.trim(),
+        announcement_type: timing === "immediate" ? "screening_update" : "scheduled_notice",
+        target_type: "case",
+        target_ref: selectedCaseId,
+        target_case_id: selectedCaseId,
       });
       setAnnouncements((prev) => [created, ...prev]);
       setSubmitResult({ ok: true, message: "Announcement broadcast successfully." });
@@ -115,7 +115,7 @@ export const AnnouncementsPage = () => {
                 className="text-sm px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               >
                 {cases.map((c) => {
-                  const cId = String(c.id ?? "");
+                  const cId = String(c.case_id ?? c.id ?? "");
                   return (
                     <option key={cId} value={cId}>
                       {String(c.person_id ?? cId)}
@@ -164,15 +164,15 @@ export const AnnouncementsPage = () => {
                           <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                             {String(a.title ?? "Announcement")}
                           </p>
-                          {!!a.message && (
+                          {!!a.body && (
                             <p className="text-xs text-gray-500 mt-0.5 truncate max-w-[200px]">
-                              {String(a.message)}
+                              {String(a.body)}
                             </p>
                           )}
                         </td>
                         <td className="px-4 py-4">
                           <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                            <Users className="h-3 w-3 mr-1.5" /> {String(a.audience ?? "All")}
+                            <Users className="h-3 w-3 mr-1.5" /> {String(a.target_type ?? "All")}
                           </div>
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-500">{dateStr}</td>
@@ -217,7 +217,7 @@ export const AnnouncementsPage = () => {
               >
                 <option value="">Select a case…</option>
                 {cases.map((c) => {
-                  const cId = String(c.id ?? "");
+                  const cId = String(c.case_id ?? c.id ?? "");
                   return (
                     <option key={cId} value={cId}>
                       {String(c.person_id ?? cId)} ({cId})
@@ -248,20 +248,6 @@ export const AnnouncementsPage = () => {
                 className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 placeholder="Detail the context of the announcement…"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Target Audience</label>
-              <select
-                value={audience}
-                onChange={(e) => setAudience(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
-              >
-                <option>All Active Cases</option>
-                <option>Specific Camp Group</option>
-                <option>Specific Language Speakers</option>
-                <option>Integration Ready Status</option>
-              </select>
             </div>
 
             <div className="pt-2">
